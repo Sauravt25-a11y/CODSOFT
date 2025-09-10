@@ -1,46 +1,125 @@
+# app.py
 import streamlit as st
+import pandas as pd
+import numpy as np
 import joblib
+import seaborn as sns
+import matplotlib.pyplot as plt
 import os
 
-# Absolute path to the model
-MODEL_PATH = r"C:\Users\SAURAV THAKUR\OneDrive\Desktop\Codsoft\Titanic_Survival_Prediction\titanic_model.pkl"
-
-# Check if model exists
+# ------------------ Load Model ------------------ #
+MODEL_PATH = "titanic_model.pkl"
 if not os.path.exists(MODEL_PATH):
     st.error(f"❌ Model file not found at {MODEL_PATH}. Please run train_model.py first.")
     st.stop()
 
-# Load trained model
 model = joblib.load(MODEL_PATH)
 
-# Streamlit App
+# ------------------ Load Model with Caching ------------------ #
+@st.cache_resource
+def load_model(path):
+    return joblib.load(path)
+
+model = load_model(MODEL_PATH)
+
+# ------------------ Title ------------------ #
 st.set_page_config(page_title="Titanic Survival Prediction", page_icon="🚢")
-st.title("🚢 Titanic Survival Prediction Model")
-st.write("Enter passenger details below to predict survival, Let's see who will survive and break the matrix:")
+st.title("🚢 Titanic Survival Prediction App")
+st.write("Predict whether a passenger would survive the Titanic disaster based on their details.")
 
-# User inputs
-pclass = st.selectbox("Ticket Class", [1, 2, 3])
-sex = st.selectbox("Sex", ["male", "female"])
-age = st.slider("Age", 0, 100, 25)
-sibsp = st.number_input("Siblings/Spouses Aboard", 0, 10, 0)
-parch = st.number_input("Parents/Children Aboard", 0, 10, 0)
-fare = st.number_input("Fare ($)", 0, 600, 50)
-embarked = st.selectbox("Port of Embarkation", ["C", "Q", "S"])
+# ------------------ Sidebar Inputs ------------------ #
+st.sidebar.header("Passenger Details")
 
-# Encode inputs
-sex = 1 if sex == "male" else 0
-embarked_map = {"C": 0, "Q": 1, "S": 2}
-embarked = embarked_map[embarked]
+def user_input_features():
+    Pclass = st.sidebar.selectbox(
+        "Passenger Class",
+        [1, 2, 3],
+        format_func=lambda x: f"{x} ({'1st' if x==1 else '2nd' if x==2 else '3rd'} Class)"
+    )
+    Sex = st.sidebar.radio("Sex", ["Male", "Female"])
+    Age = st.sidebar.slider("Age", 0, 80, 30)
+    SibSp = st.sidebar.slider("Siblings/Spouses aboard", 0, 8, 0)
+    Parch = st.sidebar.slider("Parents/Children aboard", 0, 6, 0)
+    Fare = st.sidebar.slider("Fare ($)", 0.0, 500.0, 32.0)
+    Embarked = st.sidebar.selectbox(
+        "Port of Embarkation",
+        ["Cherbourg, France", "Queenstown, Ireland", "Southampton, England"]
+    )
+    
+    # Encode categorical inputs for model
+    Sex_encoded = 1 if Sex == "Male" else 0
+    Embarked_map = {"Cherbourg, France": 0, "Queenstown, Ireland": 1, "Southampton, England": 2}
+    Embarked_encoded = Embarked_map[Embarked]
+    
+    # Create dataframe
+    data = {
+        "Pclass": Pclass,
+        "Sex": Sex_encoded,
+        "Age": Age,
+        "SibSp": SibSp,
+        "Parch": Parch,
+        "Fare": Fare,
+        "Embarked": Embarked_encoded
+    }
+    features = pd.DataFrame(data, index=[0])
+    return features
 
-# Prediction
-if st.button("Predict Survival"):
-    data = [[pclass, sex, age, sibsp, parch, fare, embarked]]
-    prediction = model.predict(data)
+input_df = user_input_features()
 
-    if prediction[0] == 1:
-        st.success("🎉 The passenger would have SURVIVED!")
-    else:
-        st.error("☠️ The passenger would NOT have survived.")
 
+# ------------------ Prediction ------------------ #
+prediction = model.predict(input_df)
+prediction_proba = model.predict_proba(input_df)
+
+st.subheader("Prediction")
+survival_status = "✅ Survived" if prediction[0] == 1 else "❌ Did Not Survive"
+st.write(f"**Prediction:** {survival_status}")
+st.write(f"**Survival Probability:** {prediction_proba[0][1]*100:.2f}%")
+
+# ------------------ EDA & Insights ------------------ #
+st.subheader("Titanic Dataset Insights")
+
+# Load dataset for visualization
+csv_path = r"data/titanic.csv"  # adjust path if needed
+df = pd.read_csv(csv_path)
+
+# Quick stats
+st.write(df.describe())
+
+# Survival count plot
+st.write("### Survival Count")
+fig1, ax1 = plt.subplots()
+sns.countplot(x="Survived", data=df, ax=ax1)
+ax1.set_xticklabels(["Did Not Survive", "Survived"])
+st.pyplot(fig1)
+
+# Select numeric columns only
+numeric_df = df.select_dtypes(include=['int64', 'float64'])
+
+# Correlation heatmap
+st.write("### Feature Correlation Heatmap")
+fig2, ax2 = plt.subplots(figsize=(10, 6))
+sns.heatmap(numeric_df.corr(), annot=True, cmap="coolwarm", fmt=".2f", ax=ax2)
+st.pyplot(fig2)
+
+
+# Feature importance (Random Forest)
+from sklearn.ensemble import RandomForestClassifier
+rf = RandomForestClassifier(random_state=42)
+X = df.drop(["Survived", "Name", "Ticket", "Cabin", "PassengerId"], axis=1)
+# Encode categorical
+X["Sex"] = X["Sex"].map({"male": 1, "female": 0})
+X["Embarked"] = X["Embarked"].map({"C":0, "Q":1, "S":2})
+y = df["Survived"]
+rf.fit(X, y)
+
+st.write("### Feature Importance (Random Forest)")
+feat_importances = pd.Series(rf.feature_importances_, index=X.columns).sort_values(ascending=False)
+fig3, ax3 = plt.subplots()
+sns.barplot(x=feat_importances.index, y=feat_importances.values, ax=ax3)
+ax3.set_xticklabels(ax3.get_xticklabels(), rotation=45)
+st.pyplot(fig3)
+
+# ------------------ Footer ------------------ #
+st.markdown("---")
 st.write("👨‍💻 Developed by Saurav Thakur")
-st.write("📂 [GitHub Repository]( https://github.com/Sauravt25-a11y/Titanic_Survival_Prediction_Model )")
