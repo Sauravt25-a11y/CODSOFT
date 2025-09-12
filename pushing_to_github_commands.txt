@@ -1,0 +1,12 @@
+git add .
+git commit -m "Your commit message"
+git pull origin master --rebase
+git push origin master
+
+
+
+---for pkl file only optional---
+
+git add titanic_model.pkl
+git commit -m "Force updated titanic_model.pkl"
+git push origin master --force
