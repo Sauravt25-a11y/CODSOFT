@@ -47,15 +47,23 @@ This project predicts whether a passenger on the Titanic would survive or not us
 ---📂 Project Structure---
 
 Titanic_Survival_Prediction_Model/
-│-- app.py                # Streamlit application  
-│-- train_model.py        # Script to train and save the ML model
-|-- visulization.py       #for generating plots and EDA 
-│-- titanic_model.pkl     # Saved ML model (generated after training)  
-│-- requirements.txt      # Required Python libraries  
-│-- README.md             # Project documentation 
-|-- data
-   |-- titanic.csv        # dataset
-|--plots                  # graphs and EDA pictures
+
+   │-- app.py                # Streamlit application  
+   
+   │-- train_model.py        # Script to train and save the ML model
+   
+   |-- visulization.py       #for generating plots and EDA 
+   
+   │-- titanic_model.pkl     # Saved ML model (generated after training)  
+   
+   │-- requirements.txt      # Required Python libraries  
+   
+   │-- README.md             # Project documentation 
+   
+   |-- data
+      |-- titanic.csv        # dataset
+   
+   |--plots                  # graphs and EDA pictures
 
 
 ---🛠️ Tech Stack---
