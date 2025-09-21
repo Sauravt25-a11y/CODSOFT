@@ -23,17 +23,23 @@ This project predicts whether a passenger on the Titanic would survive or not us
 
    pip install -r requirements.txt
 
-3. Train the model (if not already trained)
+3. Run the visualizations (optional)
+
+   python visualizations.py
+
+   This will generate plots.
+
+4. Train the model (if not already trained)
 
    python train_model.py
    
    This will generate titanic_model.pkl.
 
-4. Run the Streamlit app
+5. Run the Streamlit app
 
    streamlit run app.py
 
-5. Open your browser at:
+6. Open your browser at:
 
    http://localhost:8501/
 
@@ -42,10 +48,14 @@ This project predicts whether a passenger on the Titanic would survive or not us
 
 Titanic_Survival_Prediction_Model/
 │-- app.py                # Streamlit application  
-│-- train_model.py        # Script to train and save the ML model  
+│-- train_model.py        # Script to train and save the ML model
+|-- visulization.py       #for generating plots and EDA 
 │-- titanic_model.pkl     # Saved ML model (generated after training)  
 │-- requirements.txt      # Required Python libraries  
-│-- README.md             # Project documentation  
+│-- README.md             # Project documentation 
+|-- data
+   |-- titanic.csv        # dataset
+|--plots                  # graphs and EDA pictures
 
 
 ---🛠️ Tech Stack---
