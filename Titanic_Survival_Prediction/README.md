@@ -16,7 +16,7 @@ This project predicts whether a passenger on the Titanic would survive or not us
 
 1. **Clone the repository**  
 
-   git clone https://github.com/Sauravt25-a11y/Titanic_Survival_Prediction_Model.git
+   git clone https://github.com/Sauravt25-a11y/CODSOFT/tree/main/Titanic_Survival_Prediction
    cd Titanic_Survival_Prediction_Model
 
 2. Install requirements
