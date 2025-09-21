@@ -121,7 +121,7 @@ MovieName, input_df = user_input_features()
 prediction = model.predict(input_df)[0]
 
 st.image(
-    "https://upload.wikimedia.org/wikipedia/commons/6/69/Clapboard_and_cinema_reel.jpg",
+    "https://www.bing.com/ck/a?!&&p=6a5b8553f6aaf1a8a15c9ae544fe6e0592d786ef5cda00a4161df7f4c4da2a59JmltdHM9MTc1ODI0MDAwMA&ptn=3&ver=2&hsh=4&fclid=113253ce-2dd0-6d99-0652-470a2cd66c27&u=a1L2ltYWdlcy9zZWFyY2g_cT1jaW5lbWErcGljJmlkPTY2REFDNjFDMDdERUQ4OEY0RjRGMTk1NTE2RTEwNTdCQjU2QTQ2RTkmRk9STT1JQUNGSVI&ntb=1",
     caption="Movie Prediction 🎬"
 )
 
