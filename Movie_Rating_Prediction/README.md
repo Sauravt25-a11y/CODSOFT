@@ -1,67 +1,49 @@
-🎬 Movie Rating Prediction System
-A Machine Learning project to predict IMDb movie ratings based on movie metadata like Genre, Director, Actors, Duration, and Votes.
-This project was developed as part of the CODSOFT Data Science Internship (Task 2).
+# Movie Rating Prediction System
 
-📌 Project Overview
-IMDb ratings are influenced by factors such as cast, crew, genre, and popularity.
-In this project, we:
+## Project Overview
+This project predicts IMDb movie ratings for Indian movies using a machine learning regression model. It leverages movie-related features like genre, duration, votes, and release year to estimate the movie's expected user rating.
 
-Preprocessed and cleaned a dataset of 15,000+ Indian movies.
-Engineered features:
-Decade (derived from Year)
-Is_Long_Movie (flag for movies longer than 120 minutes)
-Log-transformed Votes
-Grouped rare Directors/Actors into "Other"
-Trained and compared models:
-✅ Random Forest
-✅ Gradient Boosting
-✅ XGBoost
-Saved the best model (movie_model.pkl) for deployment.
-⚙️ Tech Stack
-Python 3.12
-Libraries:
-pandas, numpy
-scikit-learn
-xgboost
-streamlit
-joblib
-📊 Model Performance
-Model	RMSE	R² Score
-Random Forest	1.25	0.16
-Gradient Boosting	1.23	0.19
-XGBoost	1.18	0.26 ✅
-➡️ The XGBoost model gave the best results and was saved as movie_model.pkl.
+## Features
+- Data Cleaning and Preprocessing
+- Exploratory Data Analysis (EDA) and Visualization
+- Model training with regression algorithms
+- Interactive application interface (`app.py`) for making predictions
 
-🚀 How to Run
-1. Clone the Repository
-git clone https://github.com/Sauravt25-a11y/Movie_Prediction_System.git
-cd Movie_Prediction_System
-2. Install Dependencies
-pip install -r requirements.txt
-3. Train the Model (Optional - if you want to retrain the model)
+## Repository Structure
+- `data/` - Movie dataset CSV file(s).
+- `train_model.py` / `model.py` - Scripts to train and save the regression model.
+- `visualization.py` - Script to generate EDA plots and charts.
+- `app.py` - Streamlit or Flask app for interactive prediction using the trained model.
+- `plots/` - Contains generated visualizations.
+- `Requirments.txt` - Required Python dependencies.
+
+## How to Use
+
+### Installation
+Install required packages using:
+pip install -r Requirments.txt
+
+### Train Model
+To train the movie rating prediction model:
 python train_model.py
-4. Run the Streamlit App
-streamlit run app.py
 
+### Run Application
+To start the interactive prediction app:
+python app.py
 
-📂 Project Structure
+Then open the specified local URL in your browser.
 
-Movie_Prediction_System/ │── IMDb_Movies_India.csv # Dataset │── train_model.py # Training script │── movie_model.pkl # Saved trained model │── app.py # Streamlit app │── requirements.txt # Dependencies │── README.md # Documentation
+## Dataset
+- Source: IMDb Movies India dataset (stored in the `data/` folder)
+- Includes movie metadata like genre, year, duration, votes, rating, etc.
 
-📄 Requirments
+## Evaluation Metrics
+- Root Mean Square Error (RMSE)
+- R² Score
 
-pandas==2.2.2 numpy==1.26.4 scikit-learn==1.5.2 xgboost==2.1.1 streamlit==1.38.0 joblib==1.4.2 matplotlib==3.9.2 seaborn==0.13.2
+## Author
+Saurav Thakur
 
-🙌 Acknowledgments
-This project was developed as part of the CODSOFT Data Science Internship. Special thanks to the open-source community and IMDb dataset providers for making this project possible.
+---
 
-📢 Connect with Me
-If you find this project useful or interesting, feel free to ⭐ star the repo and connect with me:
-
-🔗 GitHub
-💼 LinkedIn
-🚀 Final Note
-Predicting IMDb ratings is inherently challenging because ratings depend on subjective factors like audience taste and cultural trends.
-Still, this project demonstrates how machine learning + feature engineering + boosting models can provide meaningful insights and predictive power.
-
-Thank you for exploring this project! 🎬📊
+This project demonstrates the process from data exploration to interactive machine learning model deployment in Python.
